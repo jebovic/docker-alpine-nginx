@@ -1,0 +1,14 @@
+services:
+  - docker
+
+script:
+  - container_id=$(mktemp)
+  - docker build -t container_under_test .
+  - docker run --detach -p 80:80 container_under_test > "${container_id}"
+  - docker exec "$(cat ${container_id})" env TERM=xterm nginx -v
+  - docker exec "$(cat ${container_id})" env TERM=xterm nginx -t
+  - curl http://localhost
+
+notifications:
+  slack:
+    secure: dJdL1+ApcYYBdaGkZY3Yi6j7vfPAfSHWrcMf+08xmprqTe4xRLFoeaGHURn+xENB0X9hYL7eYX2aGYC2tXcMXijSi9wLQWce4EaGOZFpZCyLgOjYatAFKUGtSoUpQieJxJ1z9Iv0Ntnqj/5GkR6sOrmd6UBjHTOxbG1UlNQtHpi/WSQqP5+u2J1xofZsETwlclVAqKNqr436xA3RQjKbCv0U7eVhQp7ds7VDmyzC+sHeNK8EUk1wxImS+pnInujzubhYJnSV/ZuLxi3Q0ERmQ7jfoseHuNjTfWxHN9eSR+WXTTzsPtuLfSq2PmsJ+nUdAgWFvtTxaL2eX02aZCLInJB4xKXg5y46KMhfz3PTDEkxZAB27uyJfqAPViL0Acvqm89Z6x5uoS5TvkLeNSBaqfxQiCv0drGD8PW0IFiRnvzDdl5/EmhQ+1t+QM20FBSJrjdSSn4SxYOb/W10Kl2/A/Pol//ljK9HQOIX4WJFKbZ9Ivgid9sTmVpUESOZXxJE7sfKQXTTYhnDSHbuEugLWbd29YqTiWLVlzcSMp8OhpwV28okYO9VZRPgOfRD7jRs1uYAmroOSuG39srZYxqGNEHzT8RNwD7G6hmiNOriZ++4YA31ulyQI4evrSfKPXgLI/6QcwUkcPVGgVpZoxrXQwYGXZyDTFSr4q2wqc1kcI0=
