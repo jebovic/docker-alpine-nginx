@@ -8,7 +8,6 @@ RUN apk update && \
     apk add --update openssl nginx && \
     mkdir /run/nginx && \
     mkdir /etc/nginx/certificates && \
-    mkdir /etc/nginx/conf.d && \
     openssl req \
         -x509 \
         -newkey rsa:2048 \
